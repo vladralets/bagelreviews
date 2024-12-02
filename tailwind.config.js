@@ -10,7 +10,8 @@ export default {
       colors: {
         'light': '#ffffff',
         'dark': '#1a1a1a',
-        "border-color": 'rgba(84, 84, 84, 0.7)'
+        "bagel": '#8CCBBA',
+        "bagel-dark": "rgb(65, 181, 150)"
       },
     },
   },

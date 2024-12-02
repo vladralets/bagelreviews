@@ -1,0 +1,1 @@
+export type TRestaurant = 'KV' | 'FL' | 'CH' | 'ML'

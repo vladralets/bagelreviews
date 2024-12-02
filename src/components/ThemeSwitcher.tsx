@@ -8,7 +8,7 @@ const ThemeSwitcher: React.FC = () => {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 rounded-lg text-black dark:text-white transition-all duration-300"
+      className="p-2 rounded-lg text-bagel transition-all duration-300"
     >
       {theme === "light" ? (
         <MoonIcon className="w-6 h-6" />
