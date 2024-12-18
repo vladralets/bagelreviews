@@ -10,7 +10,6 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [username, setUsername] = useState<string>("");
 
-  // Проверяем localStorage при загрузке страницы
   useEffect(() => {
     const savedUser = localStorage.getItem("username");
     if (savedUser) {

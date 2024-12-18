@@ -11,7 +11,7 @@ const Login = ({ onLogin }: LoginProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (username === "admin" && password === "88005553535") {
+    if (username === "admin" && password === "Admin_2024") {
       onLogin(username);
     } else {
       setError("Invalid username or password");
