@@ -1,32 +1,34 @@
 import { useState } from "react";
-import { GoogleReviewsResponse, TRest, Review } from "../types/types";
+import { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } from "../constants/credentials";
+import { truncateDecimals } from "../hooks/truncateDecimals";
+import { GoogleReviewsResponse, Review, TRest } from "../types/types";
 import Button from "./Button";
 
 interface IRestCardProps {
   rest: TRest;
 }
 
-// OAuth Configuration
-const CLIENT_ID = "520751353666-t4ub1cgobqh6g70dd6mn6fhagkl88o16.apps.googleusercontent.com";
-const CLIENT_SECRET = "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";
-const REFRESH_TOKEN = "1//042WCEyufCjb2CgYIARAAGAQSNwF-L9IrQ7ixUPOy0Iakr5w7zLa3ykXjYNglzKYWRhrtlven5hsT2XJGeHjhmLpLDAPB4waWK2c";
+type TReviewDataObj = {
+  totalReviewCount: number;
+  averageRating: number;
+  reviews: Review[];
+}
+
+const starRatingMap: { [key: string]: number } = {
+  STAR_RATING_UNSPECIFIED: 0,
+  ONE: 1,
+  TWO: 2,
+  THREE: 3,
+  FOUR: 4,
+  FIVE: 5,
+};
 
 const RestCard = ({ rest }: IRestCardProps) => {
   const [wasUpdated, setWasUpdated] = useState(false);
   const [reviewsData, setReviewsData] = useState<GoogleReviewsResponse | null>(null);
   const [updatedDate, setUpdatedDate] = useState<Date | null>(null);
   const [loading, setLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);
-
-  // Карта для преобразования строкового рейтинга в число
-  const starRatingMap: { [key: string]: number } = {
-    STAR_RATING_UNSPECIFIED: 0,
-    ONE: 1,
-    TWO: 2,
-    THREE: 3,
-    FOUR: 4,
-    FIVE: 5,
-  };
+  const [accessToken, setAccessToken] = useState<string | null>(null);  
 
   // Получение Access Token
   const getAccessToken = async (): Promise<string> => {
@@ -56,8 +58,13 @@ const RestCard = ({ rest }: IRestCardProps) => {
   };
 
   // Получение всех отзывов с постраничной загрузкой
-  const fetchAllReviews = async (token: string): Promise<Review[]> => {
-    let allReviews: Review[] = [];
+  const fetchAllReviews = async (token: string): Promise<TReviewDataObj> => {
+    const reviewsData = {
+      reviews: [] as Review[],
+      averageRating: 0,
+      totalReviewCount: 0,
+    }
+    // let allReviews: Review[] = [];
     let nextPageToken: string | undefined;
 
     do {
@@ -76,19 +83,18 @@ const RestCard = ({ rest }: IRestCardProps) => {
       if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
 
       const data: GoogleReviewsResponse = await response.json();
-      allReviews = [...allReviews, ...data.reviews];
+      // console.log(data);
+      // allReviews = [...allReviews, ...data.reviews];
+
+      reviewsData.reviews.push(...data.reviews);
+      reviewsData.totalReviewCount = data.totalReviewCount;
+      reviewsData.averageRating = data.averageRating;
       nextPageToken = data.nextPageToken;
     } while (nextPageToken);
 
-    return allReviews;
+    return reviewsData;
   };
 
-  // Обрезка числа до трёх знаков после запятой без округления
-  const truncateToThreeDecimals = (num: number): number => {
-    return Math.floor(num * 1000) / 1000;
-  };
-
-  // Функция вычисления среднего рейтинга
   const calculateAverageRating = (reviews: Review[]): number => {
     const validRatings = reviews
       .map((review) => starRatingMap[review.starRating] || 0)
@@ -97,7 +103,7 @@ const RestCard = ({ rest }: IRestCardProps) => {
     const totalStars = validRatings.reduce((sum, rating) => sum + rating, 0);
     const average = validRatings.length > 0 ? totalStars / validRatings.length : 0;
 
-    return truncateToThreeDecimals(average);
+    return truncateDecimals(average);
   };
 
   // Основной обработчик получения отзывов
@@ -107,12 +113,14 @@ const RestCard = ({ rest }: IRestCardProps) => {
       const token = await getAccessToken();
       const reviews = await fetchAllReviews(token);
 
-      const averageRating = calculateAverageRating(reviews);
+      console.log("reviews", reviews);
+
+      const averageRating = calculateAverageRating(reviews.reviews);
 
       setReviewsData({
-        totalReviewCount: reviews.length,
+        totalReviewCount: reviews.totalReviewCount,
         averageRating,
-        reviews,
+        reviews: reviews.reviews,
       });
 
       setWasUpdated(true);
