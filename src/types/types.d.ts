@@ -34,3 +34,9 @@ export interface ReviewReply {
 }
 
 export type StarRating = "ONE" | "TWO" | "THREE" | "FOUR" | "FIVE";
+
+export type TReviewDataObj = {
+  totalReviewCount: number;
+  averageRating: number;
+  reviews: Review[];
+}

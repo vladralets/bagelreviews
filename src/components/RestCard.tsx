@@ -1,17 +1,11 @@
 import { useState } from "react";
 import { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } from "../constants/credentials";
 import { truncateDecimals } from "../hooks/truncateDecimals";
-import { GoogleReviewsResponse, Review, TRest } from "../types/types";
+import { GoogleReviewsResponse, Review, TRest, TReviewDataObj } from "../types/types";
 import Button from "./Button";
 
 interface IRestCardProps {
   rest: TRest;
-}
-
-type TReviewDataObj = {
-  totalReviewCount: number;
-  averageRating: number;
-  reviews: Review[];
 }
 
 const starRatingMap: { [key: string]: number } = {
@@ -30,7 +24,6 @@ const RestCard = ({ rest }: IRestCardProps) => {
   const [loading, setLoading] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);  
 
-  // Получение Access Token
   const getAccessToken = async (): Promise<string> => {
     if (accessToken) return accessToken;
 
@@ -57,14 +50,13 @@ const RestCard = ({ rest }: IRestCardProps) => {
     }
   };
 
-  // Получение всех отзывов с постраничной загрузкой
+  
   const fetchAllReviews = async (token: string): Promise<TReviewDataObj> => {
     const reviewsData = {
       reviews: [] as Review[],
       averageRating: 0,
       totalReviewCount: 0,
-    }
-    // let allReviews: Review[] = [];
+    };
     let nextPageToken: string | undefined;
 
     do {
@@ -83,8 +75,6 @@ const RestCard = ({ rest }: IRestCardProps) => {
       if (!response.ok) throw new Error(`Error ${response.status}: ${response.statusText}`);
 
       const data: GoogleReviewsResponse = await response.json();
-      // console.log(data);
-      // allReviews = [...allReviews, ...data.reviews];
 
       reviewsData.reviews.push(...data.reviews);
       reviewsData.totalReviewCount = data.totalReviewCount;
@@ -106,14 +96,11 @@ const RestCard = ({ rest }: IRestCardProps) => {
     return truncateDecimals(average);
   };
 
-  // Основной обработчик получения отзывов
   const getReviewsHandler = async () => {
     setLoading(true);
     try {
       const token = await getAccessToken();
       const reviews = await fetchAllReviews(token);
-
-      console.log("reviews", reviews);
 
       const averageRating = calculateAverageRating(reviews.reviews);
 
