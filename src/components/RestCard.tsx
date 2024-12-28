@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, POSTMAN_TOKEN } from "../constants/credentials";
+import { POSTMAN_TOKEN } from "../constants/credentials";
 import { truncateDecimals } from "../hooks/truncateDecimals";
 import { GoogleReviewsResponse, Review, TRest, TReviewDataObj } from "../types/types";
 import Button from "./Button";
@@ -22,36 +22,36 @@ const RestCard = ({ rest }: IRestCardProps) => {
   const [reviewsData, setReviewsData] = useState<GoogleReviewsResponse | null>(null);
   const [updatedDate, setUpdatedDate] = useState<Date | null>(null);
   const [loading, setLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(null);  
+  // const [accessToken, setAccessToken] = useState<string | null>(null);  
 
-  const getAccessToken = async (): Promise<string> => {
-    if (accessToken) return accessToken;
+  // const getAccessToken = async (): Promise<string> => {
+  //   if (accessToken) return accessToken;
 
-    try {
-      const response = await fetch("https://oauth2.googleapis.com/token", {
-        method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          client_id: CLIENT_ID,
-          client_secret: CLIENT_SECRET,
-          refresh_token: REFRESH_TOKEN,
-          grant_type: "refresh_token",
-        }).toString(),
-      });
+  //   try {
+  //     const response = await fetch("https://oauth2.googleapis.com/token", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/x-www-form-urlencoded" },
+  //       body: new URLSearchParams({
+  //         client_id: CLIENT_ID,
+  //         client_secret: CLIENT_SECRET,
+  //         refresh_token: REFRESH_TOKEN,
+  //         grant_type: "refresh_token",
+  //       }).toString(),
+  //     });
 
-      if (!response.ok) throw new Error("Failed to get access token");
+  //     if (!response.ok) throw new Error("Failed to get access token");
 
-      const data = await response.json();
-      setAccessToken(data.access_token);
-      return data.access_token;
-    } catch (error) {
-      console.error("Error fetching access token:", error);
-      throw error;
-    }
-  };
+  //     const data = await response.json();
+  //     setAccessToken(data.access_token);
+  //     return data.access_token;
+  //   } catch (error) {
+  //     console.error("Error fetching access token:", error);
+  //     throw error;
+  //   }
+  // };
 
-  
-  const fetchAllReviews = async (token: string): Promise<TReviewDataObj> => {
+  // token: string
+  const fetchAllReviews = async (): Promise<TReviewDataObj> => {
     const reviewsData = {
       reviews: [] as Review[],
       averageRating: 0,
@@ -100,7 +100,7 @@ const RestCard = ({ rest }: IRestCardProps) => {
     setLoading(true);
     try {
       // const token = await getAccessToken();
-      const reviews = await fetchAllReviews("");
+      const reviews = await fetchAllReviews();
 
       const averageRating = calculateAverageRating(reviews.reviews);
 
