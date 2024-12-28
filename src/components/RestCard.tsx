@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN } from "../constants/credentials";
+import { CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN, POSTMAN_TOKEN } from "../constants/credentials";
 import { truncateDecimals } from "../hooks/truncateDecimals";
 import { GoogleReviewsResponse, Review, TRest, TReviewDataObj } from "../types/types";
 import Button from "./Button";
@@ -67,7 +67,7 @@ const RestCard = ({ rest }: IRestCardProps) => {
       const response = await fetch(url, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${POSTMAN_TOKEN}`,
           "Content-Type": "application/json",
         },
       });
@@ -99,8 +99,8 @@ const RestCard = ({ rest }: IRestCardProps) => {
   const getReviewsHandler = async () => {
     setLoading(true);
     try {
-      const token = await getAccessToken();
-      const reviews = await fetchAllReviews(token);
+      // const token = await getAccessToken();
+      const reviews = await fetchAllReviews("");
 
       const averageRating = calculateAverageRating(reviews.reviews);
 
