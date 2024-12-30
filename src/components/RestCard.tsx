@@ -125,9 +125,14 @@ const RestCard = ({ rest }: IRestCardProps) => {
         return 4.745;
       case "573606365957609235":
         return 4.737;
+      case "2006968128717853823":
+        return 4.722;
+      case "1316971867827086987":
+        return 4.817;
+      case "10697342575667036255":
+        return 4.679;
       default:
         return reviewsData ? reviewsData.averageRating : 0;
-        break;
     }
   }
 
