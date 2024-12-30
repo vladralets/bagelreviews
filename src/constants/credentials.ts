@@ -1,4 +1,3 @@
 export const CLIENT_ID = "520751353666-t4ub1cgobqh6g70dd6mn6fhagkl88o16.apps.googleusercontent.com";
 export const CLIENT_SECRET = "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";
-export const REFRESH_TOKEN = "1//042WCEyufCjb2CgYIARAAGAQSNwF-L9IrQ7ixUPOy0Iakr5w7zLa3ykXjYNglzKYWRhrtlven5hsT2XJGeHjhmLpLDAPB4waWK2c";
-export const POSTMAN_TOKEN = "ya29.a0ARW5m770fd0nb2zyDtW5C8wsVYcYww7op29TQ0dKUhs-0nltGOlx9xYhBuvdP07hfvhaGs88yrJuB1X6o45bvDXfhiosiChRFjM1O20Y9GaZMw-R27-ATDkuK6sJT5ia6XDd7_eymJmEO_am3ZiplB3e86QyGMv35oYaCgYKAVESARMSFQHGX2MiZ-Ck4foP_LGpZKwzqsvRmw0170";
+export const REFRESH_TOKEN = "1//094tZ_Z-F0Y7_CgYIARAAGAkSNwF-L9IrQ7zpTqrEOVy0dnIpuwWlt4SgyO3rYR4C-lVMRgW3-duamMn4LkxkVACDC-PTmrW6qOA";
