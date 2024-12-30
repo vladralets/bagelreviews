@@ -119,6 +119,18 @@ const RestCard = ({ rest }: IRestCardProps) => {
     }
   };
 
+  const getUpdatedRating = () => {
+    switch (rest.id) {
+      case "18267591594997877344":
+        return 4.745;
+      case "573606365957609235":
+        return 4.737;
+      default:
+        return reviewsData ? reviewsData.averageRating : 0;
+        break;
+    }
+  }
+
   return (
     <div className="rounded-md p-6 dark:bg-transparent border-bagel border-[0.5px] shadow-sm shadow-bagel flex flex-col justify-between">
       <div className="flex justify-between mb-12">
@@ -140,7 +152,8 @@ const RestCard = ({ rest }: IRestCardProps) => {
               <div className="flex gap-2 items-center">
                 <p>Rating:</p>
                 <span className="bg-green-500 py-1 px-2 rounded-md">
-                  {reviewsData.averageRating}
+                  {/* {reviewsData.averageRating} */}
+                  {getUpdatedRating()}
                 </span>
               </div>
             </div>
